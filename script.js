@@ -27,6 +27,15 @@ const game = () => {
     const playerHand = document.querySelector(".player-hand");
     //select the computer hand and store in a variable
     const computerHand = document.querySelector(".computer-hand");
+    //select hands images and store in a variable
+    const hands = document.querySelectorAll(".hands img");
+
+    //loop through hands and add event listener that stops the animation once it is done running
+    hands.forEach(hand => {
+      hand.addEventListener("animationend", function() {
+        this.style.animation = "";
+      });
+    });
 
     //create an array that represents the computer's choices
     const computerOptions = ["rock", "paper", "scissors"];
@@ -39,23 +48,30 @@ const game = () => {
         //apply randomize method to computer options array
         const computerChoice = computerOptions[computerNumber];
 
-        //call comparehands function here
-        compareHands(this.textContent, computerChoice);
+        //create set timeout function
+        setTimeout(() => {
+          //call comparehands function here
+          compareHands(this.textContent, computerChoice);
 
-        //update images based on choice
-        playerHand.src = `./assets/${this.textContent}.png`;
-        computerHand.src = `./assets/${computerChoice}.png`;
+          //update images based on choice
+          playerHand.src = `./assets/${this.textContent}.png`;
+          computerHand.src = `./assets/${computerChoice}.png`;
+        }, 2000);
+
+        //add animations to hands
+        playerHand.style.animation = "shakePlayer 2s ease";
+        computerHand.style.animation = "shakeComputer 2s ease";
       });
     });
   };
 
   //function that updates the score
-    const updateScore = () => {
-      const playerScore = document.querySelector(".player-score p");
-      const computerScore = document.querySelector(".computer-score p");
-      playerScore.textContent = pScore;
-      computerScore.textContent = cScore;
-    };
+  const updateScore = () => {
+    const playerScore = document.querySelector(".player-score p");
+    const computerScore = document.querySelector(".computer-score p");
+    playerScore.textContent = pScore;
+    computerScore.textContent = cScore;
+  };
 
   //function that compares the hand choices of each side
   const compareHands = (playerChoice, computerChoice) => {
@@ -70,7 +86,7 @@ const game = () => {
     if (playerChoice === "rock") {
       if (computerChoice === "scissors") {
         winner.textContent = "Player wins!";
-        pScore++
+        pScore++;
         updateScore();
         return; //ends the function
       } else {
